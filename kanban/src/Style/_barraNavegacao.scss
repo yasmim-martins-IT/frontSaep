@@ -1,0 +1,22 @@
+@use './variaveis' as *;
+
+.barra{
+    background-color: $principal;
+    color:$background;
+    font-size: 14px;
+    height: 40px;
+    width: 100vw;
+
+    ul{
+        display:flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        gap:20px;
+        padding: 10px;
+    }
+    li{
+        text-decoration: none;
+        list-style: none;
+    }
+
+}

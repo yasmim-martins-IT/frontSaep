@@ -1,0 +1,15 @@
+@use './variaveis' as *;
+
+.conteiner{
+    width: 100vw;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    background-color:$principal ;
+
+    .titulo{
+        font-size: 18px;
+        color: $background;
+        font-family: $font-principal;
+    }
+}

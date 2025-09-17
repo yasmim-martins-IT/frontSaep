@@ -1,0 +1,32 @@
+@use'./variaveis' as *;
+.formulario{
+    max-width: 500px;
+    margin: 10px;
+    padding: 5px;
+    background-color: $background;
+    border-radius: $borda-arrendondada;
+    box-shadow: 0 4px 8px rgb(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+
+}
+
+    h2{
+        font-size: 24px;
+        color:$cor-destaque;
+        text-align: center;
+
+    }
+    label{
+        font-weight: bold;
+        color:$cor-destaque;
+    }
+    input, select, textarea{
+        padding: 5px;
+        border-radius: $borda-arrendondada;
+        border-color: $cor-destaque;
+        cursor:pointer;
+        font-size: 12px;
+
+    }
