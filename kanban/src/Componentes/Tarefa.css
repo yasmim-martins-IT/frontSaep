@@ -1,0 +1,82 @@
+/* Card da tarefa */
+.tarefa-card {
+  background-color: #f9f9f9;
+  border-radius: 12px;
+  padding: 15px 20px;
+  margin-bottom: 15px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+/* Efeito hover */
+.tarefa-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+}
+
+/* Título da tarefa */
+.tarefa-card h3 {
+  margin: 0 0 10px 0;
+  font-size: 1.1rem;
+  color: #333;
+}
+
+/* Lista de detalhes */
+.tarefa-card dl {
+  margin: 0 0 10px 0;
+  font-size: 0.95rem;
+  color: #555;
+}
+
+.tarefa-card dt {
+  font-weight: 600;
+  display: inline;
+}
+
+.tarefa-card dd {
+  display: inline;
+  margin: 0 0 0 5px;
+}
+
+/* Botões principais */
+.tarefa-card button {
+  padding: 8px 12px;
+  margin-right: 8px;
+  margin-top: 5px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  transition: 0.3s;
+}
+
+/* Botões de ação */
+.tarefa-card button[type="submit"] {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.tarefa-card button[type="submit"]:hover {
+  background-color: #0056b3;
+}
+
+/* Form de alteração de status */
+.tarefa-card form {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.tarefa-card select {
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 0.95rem;
+}
+
+.tarefa-card select:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 0 2px rgba(0,123,255,0.2);
+}

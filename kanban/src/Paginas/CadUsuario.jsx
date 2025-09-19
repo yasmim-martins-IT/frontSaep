@@ -1,72 +1,60 @@
-//formas para fzer a validção de um formulário com o react
-//zod , trabalaha juntamente com outros dois componente
-//"zod " + "useForm" + "resolver"
-
-
+// src/pages/CadUsuario.jsx
 import { useForm } from "react-hook-form";
-import { z } from 'zod';
+import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
-
-
-
-//zod trabalha com o schema que diz como deve ser feito a validação
-//ele pega campo a campo com oq vi validar ,como vai validar e oq vai acontecer caso de erro 
+import "./CadUsuario.css"; // Import do CSS
 
 const schemaCadUsuario = z.object({
-    nome: z.string()
-        .min(1,'Preencha o campo nome, por favor') //quantidade minima de caractere , oque acontece quando da erro
-        .max(30, 'O campo permite até 30 caracteres'), //quantidade máxima de carectere
-   
+  nome: z.string()
+    .min(1, "Preencha o campo nome, por favor")
+    .max(30, "O campo permite até 30 caracteres")
+    .regex(/^[A-Za-zÀ-ÿ\s]+$/ , "O nome só pode ter letras e espaço"),
+  email: z.string()
+    .min(1, "Preencha o campo email, por favor")
+    .max(50, "O campo permite até 50 caracteres")
+    .email("Insira um email válido")
+    .regex(/^[A-Za-zÀ-ÿ\s]+$/ , "insira um email valido") ,  
+});
 
-    email: z.string()
-        .min(1, 'Preencha o campo email, por favor')
-        .max(50, 'O campo permite até 50 caracteres')
-        .email('Insira um email válido'),
-    });
- 
- 
-export function CadUsuario(){
-   const {
+export function CadUsuario() {
+  const {
     register,
     handleSubmit,
     formState: { errors },
-    reset
-} = useForm({ resolver: zodResolver(schemaCadUsuario) });
-    async function obterDados(data) {
-        console.log("dados inseridos", data)
-        
+    reset,
+  } = useForm({ resolver: zodResolver(schemaCadUsuario) });
 
-        // chama a API
-        try{
-            await axios.post('http://127.0.0.1:8000/usuarios/', data);
-            alert("Usuário cadastrado com sucesso!!"); // asiim que o post da certo retorna essa reposta
-            reset(); // reseta o formulário
- 
-        }catch(errors){ // caso der ruim
-            alert("Houve um erro durante o cadastro, qualquer problema chama o Paulo");
-            console.error("Deu ruim hein", errors)
-        }
+  async function obterDados(data) {
+    try {
+      await axios.post("http://127.0.0.1:8000/usuario/", data);
+      alert("✅ Usuário cadastrado com sucesso!");
+      reset();
+    } catch (error) {
+      alert("❌ Houve um erro durante o cadastro");
+      console.error("Erro no cadastro:", error);
+    }
+  }
 
-       
-    }    
-    return(
-        // no momento da submissão chama as funções que a gente criou
-        <form className="formulario"onSubmit={handleSubmit(obterDados)}>
-            <h2>Cadastro de Usuário</h2>
-            <label>Nome:</label>
+  return (
+    <div className="container">
+      <form onSubmit={handleSubmit(obterDados)} className="formulario">
+        <h2>Cadastro de Usuário</h2>
 
-            {/* o register pega o valor inserido num campo input /> */}
-            <input type="text" placeholder="Jose da Silva" {...register('nome')}/>
-           
-            {/* caso de ruim cria um novo paragrafo que exibe a mensagem */}
-            {errors.nome && <p>{errors.nome.message}</p>}
+        <label>Nome:</label>
+        <input type="text" placeholder="Jose da Silva" {...register("nome")} />
+        {errors.nome && <p className="erro">{errors.nome.message}</p>}
 
-            <label>E-mail:</label>
-            <input type='email' placeholder="email@dominio.com.br" {...register('email')}/>
-            {errors.email && <p>{errors.email.message}</p>}
- 
-            <button type="submit">Cadastrar</button>
-        </form>
-    )
+        <label>E-mail:</label>
+        <input
+          type="email"
+          placeholder="email@dominio.com.br"
+          {...register("email")}
+        />
+        {errors.email && <p className="erro">{errors.email.message}</p>}
+
+        <button type="submit">Cadastrar</button>
+      </form>
+    </div>
+  );
 }

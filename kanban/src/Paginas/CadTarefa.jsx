@@ -1,82 +1,90 @@
-
+// src/pages/CadastroTarefa.jsx
 import { useForm } from "react-hook-form";
-import { z } from 'zod';
+import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
+import "./CadastroTarefa.css"; // Import do CSS que vamos criar
 
+const schemaCadTarefa = z.object({
+  usuario: z
+    .string()
+    .min(1, "Informe o ID do usuário")
+    .regex(/^\d+$/, "O ID deve ser numérico"),
+  descricao: z
+    .string()
+    .min(1, "Preencha a descrição da tarefa")
+    .max(100, "Descrição pode ter no máximo 100 caracteres"),
+  setor: z.string().min(1, "Informe o setor da tarefa"),
+  prioridade: z.enum(["baixo", "medio", "alto"], {
+    errorMap: () => ({ message: "Selecione a prioridade" }),
+  }),
+  status: z.enum(["a_fazer", "fazendo", "concluido"], {
+    errorMap: () => ({ message: "Selecione o status" }),
+  }),
+});
 
-const schemaTarefa = z.object ({
-    usuario: z.number({ required_error: "Usuário é obrigatório" }),
-  descricao: z.string().min(1, "Descrição é obrigatória"),
-  setor: z.string().min(1, "Setor é obrigatório"),
-  prioridade: z.enum(["baixo", "medio", "alto"]),
-  status: z.enum(["a_fazer", "fazendo", "concluido"]),
-}) ; 
-
-
-
-export function CadTarefa () {
+export function CadastroTarefa() {
   const {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm({
-    resolver: zodResolver(tarefaSchema),
+    resolver: zodResolver(schemaCadTarefa),
   });
 
-    const onSubmit = async (data) => {
-    console.log("dados do formulário:", data);
+  async function obterDados(data) {
     try {
-      const response = await axios.post("http://127.0.0.1:8000/tarefas/", data);
-      console.log("Tarefa cadastrada:", response.data);
-    } catch (err) {
-      console.error("Erro ao cadastrar tarefa:", err);
+      await axios.post("http://127.0.0.1:8000/tarefas/", data);
+      alert("✅ Tarefa cadastrada com sucesso!");
+      reset();
+    } catch (error) {
+      alert("❌ Houve um erro durante o cadastro");
+      console.error("Erro no cadastro:", error);
     }
-  };
+  }
 
-  
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <div>
-        <label>Usuário (ID)</label>
-        <input type="number" {...register("usuario")} />
-        {errors.usuario && <p>{errors.usuario.message}</p>}
-      </div>
+    <div className="container">
+      <form onSubmit={handleSubmit(obterDados)} className="formulario">
+        <h2>📝 Cadastro de Tarefa</h2>
 
-      <div>
+        <label>ID do Usuário</label>
+        <input type="text" placeholder="Ex: 1" {...register("usuario")} />
+        {errors.usuario && <p className="erro">{errors.usuario.message}</p>}
+
         <label>Descrição</label>
-        <input type="text" {...register("descricao")} />
-        {errors.descricao && <p>{errors.descricao.message}</p>}
-      </div>
+        <input
+          type="text"
+          placeholder="Digite a descrição da tarefa"
+          {...register("descricao")}
+        />
+        {errors.descricao && <p className="erro">{errors.descricao.message}</p>}
 
-      <div>
         <label>Setor</label>
-        <input type="text" {...register("setor")} />
-        {errors.setor && <p>{errors.setor.message}</p>}
-      </div>
+        <input type="text" placeholder="Ex: Financeiro" {...register("setor")} />
+        {errors.setor && <p className="erro">{errors.setor.message}</p>}
 
-      <div>
         <label>Prioridade</label>
         <select {...register("prioridade")}>
+          <option value="">Selecione</option>
           <option value="baixo">Baixo</option>
           <option value="medio">Médio</option>
           <option value="alto">Alto</option>
         </select>
-        {errors.prioridade && <p>{errors.prioridade.message}</p>}
-      </div>
+        {errors.prioridade && <p className="erro">{errors.prioridade.message}</p>}
 
-      <div>
         <label>Status</label>
-        <select {...register("status")}>
+        < select {...register("status")}>
+          <option value="">Selecione</option>
           <option value="a_fazer">A fazer</option>
           <option value="fazendo">Fazendo</option>
           <option value="concluido">Concluído</option>
         </select>
-        {errors.status && <p>{errors.status.message}</p>}
-      </div>
+        {errors.status && <p className="erro">{errors.status.message}</p>}
 
-      <button type="submit">Cadastrar Tarefa</button>
-    </form>
+        <button type="submit">➕ Cadastrar Tarefa</button>
+      </form>
+    </div>
   );
-
 }

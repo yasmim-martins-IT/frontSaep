@@ -1,0 +1,68 @@
+/* Estilização geral do main */
+main {
+  padding: 20px;
+  background-color: #f0f2f5;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+}
+
+/* Título principal */
+main h1 {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 30px;
+  color: #333;
+}
+
+/* Container das colunas */
+main .colunas-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap; /* Responsivo: colunas podem quebrar em telas menores */
+}
+
+/* Cada coluna */
+.coluna {
+  background-color: #fff;
+  flex: 1;
+  min-width: 250px; /* largura mínima da coluna */
+  border-radius: 15px;
+  padding: 15px;
+  box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+/* Título da coluna */
+.coluna h2 {
+  text-align: center;
+  margin-bottom: 15px;
+  font-size: 1.3rem;
+  color: #007bff;
+}
+
+/* Card de tarefa */
+.tarefa-card {
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  padding: 12px;
+  margin-bottom: 10px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+/* Efeito hover no card */
+.tarefa-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+
+/* Texto do card */
+.tarefa-card p {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #333;
+}

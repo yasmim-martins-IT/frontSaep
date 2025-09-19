@@ -1,14 +1,14 @@
-import { BarraNavegacao } from './Componentes/BarraNavegacao'
-import { Cabecalho } from './Componentes/Cabecalho'
-import { CadUsuario } from './Paginas/CadUsuario'
+import { BrowserRouter } from "react-router-dom"
+import { Rotas } from "./Rotas/Rotas";
+import "./App.css";
+
+//permite a navegação na aplicação, mexendo até o endereçamento
 function App() {
 
   return (
-    <>
-      <BarraNavegacao />
-      <Cabecalho />
-      <CadUsuario/>
-    </>
+   <BrowserRouter>
+      <Rotas/>
+   </BrowserRouter>
   )
 }
 
