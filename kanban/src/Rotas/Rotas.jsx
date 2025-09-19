@@ -1,5 +1,5 @@
 import {Routes, Route} from 'react-router-dom';
-import { CadUsuario } from '../Paginas/CadUsuario'; 
+import CadUsuario from '../Paginas/CadUsuario';
 import { CadastroTarefa } from '../Paginas/CadTarefa';
 import { Quadro } from '../Componentes/Quadro';
 import { Inicial } from '../Paginas/Inicial';
