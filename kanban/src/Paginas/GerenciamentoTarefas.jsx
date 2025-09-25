@@ -1,6 +1,6 @@
 // src/pages/GerenciarTarefas.jsx
 import React, { useEffect, useState } from "react";
-import { Quadro } from "../components/Quadro";
+import { Quadro } from "../Componentes/Quadro";
 import axios from "axios";
 import "./GerenciarTarefas.css";
 
