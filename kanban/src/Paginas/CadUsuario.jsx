@@ -4,47 +4,42 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
-import "./CadUsuario.css"; // Import do CSS
+import "./CadUsuario.css";
 
 const schemaCadUsuario = z.object({
   nome: z
     .string()
+    .trim()
     .min(1, "Preencha o campo nome, por favor")
     .max(30, "O campo permite até 30 caracteres")
-    .regex(/^[A-Za-zÀ-ÿ\s]+$/, "O nome só pode ter letras e espaço"),
+    .regex(/^[A-Za-zÀ-ÿ]+(?: [A-Za-zÀ-ÿ]+)*$/, "O nome só pode conter letras e espaço"),
   email: z
     .string()
+    .trim()
     .min(1, "Preencha o campo email, por favor")
     .max(50, "O campo permite até 50 caracteres")
     .regex(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, "Insira um email válido"),
 });
 
-export default function CadUsuario() {
+export default function CadUsuario({ onUserCreated }) {
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm({
-    resolver: zodResolver(schemaCadUsuario),
-  });
+  } = useForm({ resolver: zodResolver(schemaCadUsuario) });
 
   async function obterDados(data) {
     try {
-      await axios.post("http://127.0.0.1:8000/usuarios/", data, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await axios.post("http://127.0.0.1:8000/usuarios/", data);
       alert("✅ Usuário cadastrado com sucesso!");
-      reset(); // Limpa o formulário
+      reset();
+      if (onUserCreated) onUserCreated(response.data); // Atualiza lista no front
     } catch (error) {
-      if (error.response) {
-        console.error("Erro no cadastro:", error.response.data);
-        alert(`❌ Erro: ${JSON.stringify(error.response.data)}`);
+      if (error.response?.status === 400 && error.response.data.email) {
+        alert("❌ Email já cadastrado!");
       } else {
-        console.error("Erro no cadastro:", error);
-        alert("❌ Houve um erro durante o cadastro");
+        alert("❌ Erro no cadastro!");
       }
     }
   }
@@ -55,15 +50,11 @@ export default function CadUsuario() {
         <h2>Cadastro de Usuário</h2>
 
         <label>Nome:</label>
-        <input type="text" placeholder="Jose da Silva" {...register("nome")} />
+        <input type="text" {...register("nome")} placeholder="José da Silva" />
         {errors.nome && <p className="erro">{errors.nome.message}</p>}
 
-        <label>E-mail:</label>
-        <input
-          type="email"
-          placeholder="email@dominio.com.br"
-          {...register("email")}
-        />
+        <label>Email:</label>
+        <input type="email" {...register("email")} placeholder="email@dominio.com.br" />
         {errors.email && <p className="erro">{errors.email.message}</p>}
 
         <button type="submit">Cadastrar</button>

@@ -5,16 +5,24 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import "./CadastroTarefa.css"; // Import do CSS que vamos criar
 
+// Esquema de validação
 const schemaCadTarefa = z.object({
   usuario: z
     .string()
+    .trim()
     .min(1, "Informe o ID do usuário")
     .regex(/^\d+$/, "O ID deve ser numérico"),
   descricao: z
     .string()
-    .min(1, "Preencha a descrição da tarefa")
+    .trim()
+    .min(5, "Descrição deve ter no mínimo 5 caracteres")
     .max(100, "Descrição pode ter no máximo 100 caracteres"),
-  setor: z.string().min(1, "Informe o setor da tarefa"),
+  setor: z
+    .string()
+    .trim()
+    .min(2, "Informe o setor da tarefa")
+    .max(50, "O setor pode ter no máximo 50 caracteres")
+    .regex(/^[A-Za-zÀ-ÿ\s]+$/, "O setor só pode conter letras e espaços"),
   prioridade: z.enum(["baixo", "medio", "alto"], {
     errorMap: () => ({ message: "Selecione a prioridade" }),
   }),
@@ -33,13 +41,22 @@ export function CadastroTarefa() {
     resolver: zodResolver(schemaCadTarefa),
   });
 
+  // Função para salvar a tarefa no backend
   async function obterDados(data) {
     try {
-      await axios.post("http://127.0.0.1:8000/tarefas/", data);
+      await axios.post("http://127.0.0.1:8000/tarefas/", data, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
       alert("✅ Tarefa cadastrada com sucesso!");
       reset();
     } catch (error) {
-      alert("❌ Houve um erro durante o cadastro");
+      if (error.response) {
+        alert(`❌ Erro: ${JSON.stringify(error.response.data)}`);
+      } else {
+        alert("❌ Houve um erro durante o cadastro");
+      }
       console.error("Erro no cadastro:", error);
     }
   }
@@ -75,7 +92,7 @@ export function CadastroTarefa() {
         {errors.prioridade && <p className="erro">{errors.prioridade.message}</p>}
 
         <label>Status</label>
-        < select {...register("status")}>
+        <select {...register("status")}>
           <option value="">Selecione</option>
           <option value="a_fazer">A fazer</option>
           <option value="fazendo">Fazendo</option>
