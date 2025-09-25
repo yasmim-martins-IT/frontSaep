@@ -1,0 +1,57 @@
+/* Container principal */
+.container-gerenciar {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+  background-color: #f4f6f8;
+  min-height: 100vh;
+}
+
+/* Título da página */
+.container-gerenciar h2 {
+  text-align: center;
+  margin-bottom: 30px;
+  color: #222;
+  font-size: 26px;
+  font-weight: bold;
+}
+
+/* Board (o Quadro já aplica flex, mas reforçamos aqui se quiser usar direto) */
+.container-gerenciar .quadro {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+/* Colunas dentro do quadro */
+.container-gerenciar .coluna {
+  flex: 1;
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 15px;
+  min-height: 400px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.08);
+  display: flex;
+  flex-direction: column;
+}
+
+.container-gerenciar .coluna h3 {
+  text-align: center;
+  margin-bottom: 15px;
+  color: #444;
+  font-size: 18px;
+  font-weight: 600;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 5px;
+}
+
+/* Responsividade */
+@media (max-width: 900px) {
+  .container-gerenciar .quadro {
+    flex-direction: column;
+  }
+
+  .container-gerenciar .coluna {
+    width: 100%;
+  }
+}
