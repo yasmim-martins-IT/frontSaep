@@ -1,10 +1,10 @@
-// src/pages/CadastroTarefa.jsx
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import "./CadastroTarefa.css";
 
+// Validação (usando os valores “raw” do Django)
 const schemaCadTarefa = z.object({
   usuario: z
     .string()
@@ -15,13 +15,12 @@ const schemaCadTarefa = z.object({
     .string()
     .trim()
     .min(5, "Descrição deve ter no mínimo 5 caracteres")
-    .max(100, "Descrição pode ter no máximo 100 caracteres"),
+    .max(250, "Descrição pode ter no máximo 250 caracteres"),
   setor: z
     .string()
     .trim()
     .min(2, "Informe o setor da tarefa")
-    .max(50, "O setor pode ter no máximo 50 caracteres")
-    .regex(/^[A-Za-zÀ-ÿ\s]+$/, "O setor só pode conter letras e espaços"),
+    .max(250, "O setor pode ter no máximo 250 caracteres"),
   prioridade: z.enum(["baixo", "medio", "alto"], {
     errorMap: () => ({ message: "Selecione a prioridade" }),
   }),
@@ -38,22 +37,33 @@ export function CadastroTarefa() {
     reset,
   } = useForm({
     resolver: zodResolver(schemaCadTarefa),
+    defaultValues: {
+      prioridade: "baixo",
+      status: "a_fazer",
+    },
   });
 
   async function obterDados(data) {
     try {
-      await axios.post("http://127.0.0.1:8000/tarefas/", data, {
+      // Converte usuário para número
+      const payload = {
+        ...data,
+        usuario: parseInt(data.usuario, 10),
+      };
+
+      await axios.post("http://127.0.0.1:8000/tarefas/", payload, {
         headers: { "Content-Type": "application/json" },
       });
+
       alert("✅ Tarefa cadastrada com sucesso!");
       reset();
     } catch (error) {
+      console.error(error);
       if (error.response) {
         alert(`❌ Erro: ${JSON.stringify(error.response.data)}`);
       } else {
         alert("❌ Houve um erro durante o cadastro");
       }
-      console.error("Erro no cadastro:", error);
     }
   }
 
@@ -118,7 +128,6 @@ export function CadastroTarefa() {
           aria-invalid={!!errors.prioridade}
           aria-describedby={errors.prioridade ? "erro-prioridade" : undefined}
         >
-          <option value="">Selecione</option>
           <option value="baixo">Baixo</option>
           <option value="medio">Médio</option>
           <option value="alto">Alto</option>
@@ -136,7 +145,6 @@ export function CadastroTarefa() {
           aria-invalid={!!errors.status}
           aria-describedby={errors.status ? "erro-status" : undefined}
         >
-          <option value="">Selecione</option>
           <option value="a_fazer">A fazer</option>
           <option value="fazendo">Fazendo</option>
           <option value="concluido">Concluído</option>
