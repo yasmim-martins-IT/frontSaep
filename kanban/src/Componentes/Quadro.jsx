@@ -7,16 +7,16 @@ export function Quadro() {
   const [tarefas, setTarefas] = useState([]);
 
   useEffect(() => {
-    const apiURL = "http://127.0.0.1:8000/tarefa/";
+    const apiURL = "http://127.0.0.1:8000/tarefas/";
     axios
       .get(apiURL)
       .then((response) => setTarefas(response.data))
       .catch((error) => console.error("Deu ruim", error));
   }, []);
 
-  const tarefasAfazer = tarefas.filter((tarefa) => tarefa.status === "A fazer");
-  const tarefasFazendo = tarefas.filter((tarefa) => tarefa.status === "Fazendo");
-  const tarefasPronto = tarefas.filter((tarefa) => tarefa.status === "Pronto");
+const tarefasAfazer = tarefas.filter((tarefa) => tarefa.status === "a_fazer");
+const tarefasFazendo = tarefas.filter((tarefa) => tarefa.status === "fazendo");
+const tarefasPronto = tarefas.filter((tarefa) => tarefa.status === "concluido");
 
   return (
     <main>
