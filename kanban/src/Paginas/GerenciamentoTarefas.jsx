@@ -31,7 +31,10 @@ export function GerenciarTarefas() {
 
   async function atualizarTarefa(id, novosDados) {
     try {
-      const response = await axios.put(`http://127.0.0.1:8000/tarefas/${id}/`, novosDados);
+      const response = await axios.put(
+        `http://127.0.0.1:8000/tarefas/${id}/`,
+        novosDados
+      );
       setTarefas((prev) =>
         prev.map((t) => (t.id === id ? response.data : t))
       );
@@ -41,10 +44,24 @@ export function GerenciarTarefas() {
   }
 
   return (
-    <div className="container-gerenciar">
-      <h2>Gerenciamento de Tarefas</h2>
-      <div className="quadro">
-        <Quadro tarefas={tarefas} onDelete={excluirTarefa} onUpdate={atualizarTarefa} />
+    <div
+      className="container-gerenciar"
+      role="main"
+      aria-labelledby="titulo-gerenciar"
+    >
+      <h2 id="titulo-gerenciar">Gerenciamento de Tarefas</h2>
+
+      <div
+        className="quadro"
+        role="region"
+        aria-label="Quadro de tarefas"
+        aria-live="polite"
+      >
+        <Quadro
+          tarefas={tarefas}
+          onDelete={excluirTarefa}
+          onUpdate={atualizarTarefa}
+        />
       </div>
     </div>
   );

@@ -34,7 +34,7 @@ export default function CadUsuario({ onUserCreated }) {
       const response = await axios.post("http://127.0.0.1:8000/usuarios/", data);
       alert("✅ Usuário cadastrado com sucesso!");
       reset();
-      if (onUserCreated) onUserCreated(response.data); // Atualiza lista no front
+      if (onUserCreated) onUserCreated(response.data);
     } catch (error) {
       if (error.response?.status === 400 && error.response.data.email) {
         alert("❌ Email já cadastrado!");
@@ -46,18 +46,40 @@ export default function CadUsuario({ onUserCreated }) {
 
   return (
     <div className="container">
-      <form onSubmit={handleSubmit(obterDados)} className="formulario">
-        <h2>Cadastro de Usuário</h2>
+      <form onSubmit={handleSubmit(obterDados)} className="formulario" aria-label="Formulário de cadastro de usuário">
+        <h2 id="form-title">Cadastro de Usuário</h2>
 
-        <label>Nome:</label>
-        <input type="text" {...register("nome")} placeholder="José da Silva" />
-        {errors.nome && <p className="erro">{errors.nome.message}</p>}
+        <label htmlFor="nome">Nome:</label>
+        <input
+          id="nome"
+          type="text"
+          {...register("nome")}
+          placeholder="José da Silva"
+          aria-invalid={!!errors.nome}
+          aria-describedby={errors.nome ? "erro-nome" : undefined}
+        />
+        {errors.nome && (
+          <p id="erro-nome" className="erro" role="alert">
+            {errors.nome.message}
+          </p>
+        )}
 
-        <label>Email:</label>
-        <input type="email" {...register("email")} placeholder="email@dominio.com.br" />
-        {errors.email && <p className="erro">{errors.email.message}</p>}
+        <label htmlFor="email">Email:</label>
+        <input
+          id="email"
+          type="email"
+          {...register("email")}
+          placeholder="email@dominio.com.br"
+          aria-invalid={!!errors.email}
+          aria-describedby={errors.email ? "erro-email" : undefined}
+        />
+        {errors.email && (
+          <p id="erro-email" className="erro" role="alert">
+            {errors.email.message}
+          </p>
+        )}
 
-        <button type="submit">Cadastrar</button>
+        <button type="submit" aria-label="Cadastrar novo usuário">Cadastrar</button>
       </form>
     </div>
   );
